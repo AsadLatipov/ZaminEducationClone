@@ -12,4 +12,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ZaminEducationClone.Data\ZaminEducationClone.Data.csproj" />
+  </ItemGroup>
+
 </Project>
