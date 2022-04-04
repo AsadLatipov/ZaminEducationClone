@@ -12,40 +12,44 @@ namespace ZaminEducationClone.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class userController : ControllerBase
+    public class usersController : ControllerBase
     {
         private readonly IUserService userService;
+        public usersController(IUserService userService)
+        {
+            this.userService = userService;
+        }
 
         [HttpPost]
         public async Task<ActionResult<BaseResponse<User>>> SignUP(UserCreateDTo useDto)
         {
             var result = await userService.CreateAsync(useDto);
 
-            return result.Error.Code == null ? NotFound(result) : Ok(result);
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
         [HttpGet("{user-id}")]
-        public async Task<ActionResult<BaseResponse<User>>> GetUser([FromForm(Name = "user-id")] Guid id)
+        public async Task<ActionResult<BaseResponse<User>>> GetUser([FromRoute(Name = "user-id")] Guid id)
         {
             var result = await userService.GetAsync(obj => obj.Id == id);
-            
-            return result.Error.Code == null ? NotFound(result) : Ok(result);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<BaseResponse<IEnumerable<User>>>> GetAllAsync([FromQuery] PaginationParams @params)
         {
             var result = await userService.GetAllAsync(@params);
-            
-            return result.Error.Code == null ? NotFound(result) : Ok(result);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
         [HttpPut]
-        public async Task<ActionResult<BaseResponse<User>>> UpdateUser(User user)
+        public async Task<ActionResult<BaseResponse<User>>> UpdateUser(UserUpdateDTo user)
         {
             var result = await userService.UpdateAsync(user);
-            
-            return result.Error.Code == null ? NotFound(result) : Ok(result);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
         [HttpDelete("{user-id}")]
@@ -53,9 +57,8 @@ namespace ZaminEducationClone.Api.Controllers
         {
             var result = await userService.DeleteAsync(obj => obj.Id == id);
 
-            return result.Error.Code == null ? NotFound(result) : Ok(result);
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
-
 
     }
 }

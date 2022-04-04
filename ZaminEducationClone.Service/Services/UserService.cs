@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using ZaminEducationClone.Data.IRepositories;
 using ZaminEducationClone.Domain.Commons;
@@ -34,12 +32,12 @@ namespace ZaminEducationClone.Service.Services
             BaseResponse<User> baseResponse = new BaseResponse<User>();
             var entity = await unitOfWork.Users.GetAsync(obj => obj.Login == userDTo.Login);
 
-            if(entity is not null)
+            if (entity is not null)
             {
                 baseResponse.Error = new ErrorModel(400, "User is exist");
                 return baseResponse;
             }
-            
+
             var user = mapper.Map<User>(userDTo);
             user.Create("1");
 
@@ -47,7 +45,7 @@ namespace ZaminEducationClone.Service.Services
             var result = await unitOfWork.Users.CreateAsync(user);
             await unitOfWork.SaveChangesAsync();
             baseResponse.Data = result;
-            
+
             return baseResponse;
         }
 
@@ -56,7 +54,7 @@ namespace ZaminEducationClone.Service.Services
             BaseResponse<bool> baseResponse = new BaseResponse<bool>();
             var entity = await unitOfWork.Users.GetAsync(expression);
 
-            if (entity is not null)
+            if (entity is null)
             {
                 baseResponse.Error = new ErrorModel(400, "User not found");
                 return baseResponse;
@@ -67,15 +65,22 @@ namespace ZaminEducationClone.Service.Services
 
             baseResponse.Data = true;
             return baseResponse;
-            
+
         }
 
         public async Task<BaseResponse<IEnumerable<User>>> GetAllAsync(PaginationParams @params, Expression<Func<User, bool>> expression = null)
         {
             BaseResponse<IEnumerable<User>> baseResponse = new BaseResponse<IEnumerable<User>>();
-            
+
             var entities = await unitOfWork.Users.GetAllAsync(expression);
-            baseResponse.Data = entities.ToPagedList(@params);
+            if (entities is null)
+            {
+                baseResponse.Error = new ErrorModel(400, "Users not found");
+                return baseResponse;
+            }
+
+
+            baseResponse.Data = entities.Where(obj => obj.Status != Domain.Enums.ItemState.Deleted).ToPagedList(@params);
 
             return baseResponse;
         }
@@ -113,7 +118,7 @@ namespace ZaminEducationClone.Service.Services
 
             var result = await unitOfWork.Users.UpdateAsync(user);
             await unitOfWork.SaveChangesAsync();
-            
+
             baseResponse.Data = result;
             return baseResponse;
         }

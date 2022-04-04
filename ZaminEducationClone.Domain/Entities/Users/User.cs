@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZaminEducationClone.Domain.Commons;
 using ZaminEducationClone.Domain.Enums;
 
@@ -13,7 +9,7 @@ namespace ZaminEducationClone.Domain.Entities.Users
     {
         [Key]
         [Required]
-        public Guid Id { get ; set ; }
+        public Guid Id { get; set; }
 
         [Required]
         public string FirstName { get; set; }
@@ -25,24 +21,24 @@ namespace ZaminEducationClone.Domain.Entities.Users
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]   
+        [Required]
         public string Password { get; set; }
 
-        [Required]        
+        [Required]
         public string PhoneNumber { get; set; }
 
         [Required]
         public string Login { get; set; }
 
-        
-        
-        public DateTime CreatedDate { get ; set ; }
-        public DateTime? ModifiedDate { get ; set ; }
-        public string CreatedBy { get ; set ; }
-        public string ModifiedBy { get ; set ; }
-        public ItemState Status { get ; set ; }
-        
-        public void Create(string id=null)
+
+
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string CreatedBy { get; set; }
+        public string ModifiedBy { get; set; }
+        public ItemState Status { get; set; }
+
+        public void Create(string id = null)
         {
             CreatedDate = DateTime.Now;
             Status = ItemState.Created;

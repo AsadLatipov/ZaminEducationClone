@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ZaminEducationClone.Domain.Configurations
+﻿namespace ZaminEducationClone.Domain.Configurations
 {
     public class PaginationParams
     {
@@ -12,6 +6,6 @@ namespace ZaminEducationClone.Domain.Configurations
         private int pageSize;
 
         public int PageSize { get => pageSize; set => pageSize = value > maxPageSize ? maxPageSize : value; }
-        public int PageIndex { get; set; }        
+        public int PageIndex { get; set; }
     }
 }

@@ -1,20 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ZaminEducationClone.Data.Contexts;
 using ZaminEducationClone.Data.IRepositories;
 using ZaminEducationClone.Data.Repositories;
+using ZaminEducationClone.Service.Helpers;
+using ZaminEducationClone.Service.Interfaces;
+using ZaminEducationClone.Service.Mappers;
+using ZaminEducationClone.Service.Services;
 
 namespace ZaminEducationClone.Api
 {
@@ -33,14 +31,19 @@ namespace ZaminEducationClone.Api
             //Add DbContext
             services.AddDbContext<ZaminEducationContext>(options =>
             {
-                options.UseNpgsql(Configuration.GetConnectionString("Shopping"));
+                options.UseNpgsql(Configuration.GetConnectionString("ZaminDataBase"));
             });
+
+            // Mapping
+            services.AddAutoMapper(typeof(MappingProfile));
             
+            // My services
             services.AddHttpContextAccessor();
             
-            
+            services.AddScoped<IUserService, UserService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -61,6 +64,10 @@ namespace ZaminEducationClone.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            if (app.ApplicationServices.GetService<IHttpContextAccessor>() != null)
+            {
+                AccesToContext.Accessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
+            }
 
             app.UseAuthorization();
 

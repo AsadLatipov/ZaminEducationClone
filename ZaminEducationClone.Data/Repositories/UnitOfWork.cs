@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ZaminEducationClone.Data.Contexts;
 using ZaminEducationClone.Data.IRepositories;

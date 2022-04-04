@@ -13,7 +13,7 @@ namespace ZaminEducationClone.Domain.Entities.Courses
         public string VideoUrl { get; set; }
         public string VideoDuration { get; set; }
         public Guid TopicId { get; set; }
-        
+
         [ForeignKey(nameof(TopicId))]
         public Topic Topic { get; set; }
 
@@ -26,20 +26,20 @@ namespace ZaminEducationClone.Domain.Entities.Courses
         public ItemState Status { get; set; }
 
 
-        
+
         public void Create(string id = null)
         {
             CreatedDate = DateTime.Now;
             Status = ItemState.Created;
             CreatedBy = id;
         }
-        public void Update(string id=null)
+        public void Update(string id = null)
         {
             ModifiedDate = DateTime.Now;
             Status = ItemState.Updated;
             ModifiedBy = id;
         }
-        public void Deleted(string id=null)
+        public void Deleted(string id = null)
         {
             ModifiedDate = DateTime.Now;
             Status = ItemState.Deleted;
