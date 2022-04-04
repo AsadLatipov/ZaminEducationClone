@@ -14,21 +14,21 @@ namespace ZaminEducationClone.Data.Repositories
         public UnitOfWork(ZaminEducationContext context)
         {
             this.context = context;
-            UserRepository = new UserRepository(context);
-            LessonRepository = new LessonRepository(context);
-            CourseRepository = new CourseRepository(context);
-            SectionRepository = new SectionRepository(context);
-            TopicRepository = new TopicRepository(context);
+            Users = new UserRepository(context);
+            Lessons = new LessonRepository(context);
+            Courses = new CourseRepository(context);
+            Sections = new SectionRepository(context);
+            Topics = new TopicRepository(context);
         }
-        public IUserRepository UserRepository { get; private set; }
+        public IUserRepository Users { get; private set; }
 
-        public ILessonRepository LessonRepository { get; private set; }
+        public ILessonRepository Lessons { get; private set; }
 
-        public ISectionRepository SectionRepository { get; private set; }
+        public ISectionRepository Sections { get; private set; }
 
-        public ICourseRepository CourseRepository { get; private set; }
+        public ICourseRepository Courses { get; private set; }
 
-        public ITopicRepository TopicRepository { get; private set; }
+        public ITopicRepository Topics { get; private set; }
 
         public void Dispose()
         {

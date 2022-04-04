@@ -8,11 +8,11 @@ namespace ZaminEducationClone.Data.IRepositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        IUserRepository UserRepository { get; }
-        ILessonRepository LessonRepository { get; }
-        ISectionRepository SectionRepository { get; }
-        ICourseRepository CourseRepository { get; }
-        ITopicRepository TopicRepository { get; }
+        IUserRepository Users { get; }
+        ILessonRepository Lessons { get; }
+        ISectionRepository Sections { get; }
+        ICourseRepository Courses { get; }
+        ITopicRepository Topics { get; }
         Task SaveChangesAsync();
     }
 }

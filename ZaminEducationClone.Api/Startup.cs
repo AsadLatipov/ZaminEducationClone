@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZaminEducationClone.Data.Contexts;
+using ZaminEducationClone.Data.IRepositories;
+using ZaminEducationClone.Data.Repositories;
 
 namespace ZaminEducationClone.Api
 {
@@ -33,9 +35,12 @@ namespace ZaminEducationClone.Api
             {
                 options.UseNpgsql(Configuration.GetConnectionString("Shopping"));
             });
-
-
-
+            
+            services.AddHttpContextAccessor();
+            
+            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
