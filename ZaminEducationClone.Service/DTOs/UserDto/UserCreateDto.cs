@@ -1,12 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ZaminEducationClone.Service.DTOs
 {
-    public class UserUpdateDTo
+    public class UserCreateDto
     {
-        public Guid Id { get; set; }
-
         [Required]
         public string FirstName { get; set; }
 

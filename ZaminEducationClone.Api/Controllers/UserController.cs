@@ -20,10 +20,27 @@ namespace ZaminEducationClone.Api.Controllers
             this.userService = userService;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<BaseResponse<User>>> SignUP(UserCreateDTo useDto)
+        [HttpPost("logIn")]
+        public async Task<ActionResult<BaseResponse<User>>> LogIn(LogIn logIn)
+        {
+            var result = await userService.LogIn(logIn);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+
+        [HttpPost("SignUp")]
+        public async Task<ActionResult<BaseResponse<User>>> SignUP(UserCreateDto useDto)
         {
             var result = await userService.CreateAsync(useDto);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<BaseResponse<User>>> UpdateUser(UserUpdateDto user)
+        {
+            var result = await userService.UpdateAsync(user);
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
@@ -36,26 +53,18 @@ namespace ZaminEducationClone.Api.Controllers
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<BaseResponse<IEnumerable<User>>>> GetAllAsync([FromQuery] PaginationParams @params)
-        {
-            var result = await userService.GetAllAsync(@params);
-
-            return StatusCode(result.Code ?? result.Error.Code.Value, result);
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<BaseResponse<User>>> UpdateUser(UserUpdateDTo user)
-        {
-            var result = await userService.UpdateAsync(user);
-
-            return StatusCode(result.Code ?? result.Error.Code.Value, result);
-        }
-
         [HttpDelete("{user-id}")]
         public async Task<ActionResult<BaseResponse<bool>>> DeleteUser([FromRoute(Name = "user-id")] Guid id)
         {
             var result = await userService.DeleteAsync(obj => obj.Id == id);
+
+            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<BaseResponse<IEnumerable<User>>>> GetAllAsync([FromQuery] PaginationParams @params)
+        {
+            var result = await userService.GetAllAsync(@params);
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }

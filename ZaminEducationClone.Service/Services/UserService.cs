@@ -27,7 +27,23 @@ namespace ZaminEducationClone.Service.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResponse<User>> CreateAsync(UserCreateDTo userDTo)
+
+        public async Task<BaseResponse<User>> LogIn(LogIn login)
+        {
+            BaseResponse<User> baseResponse = new BaseResponse<User>();
+
+            var user = await unitOfWork.Users.GetAsync(obj => obj.Password == login.Password && obj.Email == login.Email);
+            if (user == null || user.Status == Domain.Enums.ItemState.Deleted)
+            {
+                baseResponse.Error = new ErrorModel(400, "Email or Password is incorrect");
+                return baseResponse;
+            }
+
+            baseResponse.Data = user;
+            return baseResponse;
+        }
+        
+        public async Task<BaseResponse<User>> CreateAsync(UserCreateDto userDTo)
         {
             BaseResponse<User> baseResponse = new BaseResponse<User>();
             var entity = await unitOfWork.Users.GetAsync(obj => obj.Login == userDTo.Login);
@@ -46,6 +62,44 @@ namespace ZaminEducationClone.Service.Services
             await unitOfWork.SaveChangesAsync();
             baseResponse.Data = result;
 
+            return baseResponse;
+        }
+
+        public async Task<BaseResponse<User>> UpdateAsync(UserUpdateDto userDto)
+        {
+            BaseResponse<User> baseResponse = new BaseResponse<User>();
+
+            var entity = await unitOfWork.Users.GetAsync(obj => obj.Id == userDto.Id);
+            if (entity is null)
+            {
+                baseResponse.Error = new ErrorModel(404, "Customer not found");
+                return baseResponse;
+            }
+
+            var user = mapper.Map<User>(userDto);
+            user.Update("1");
+            user.Id = userDto.Id;
+
+
+            var result = await unitOfWork.Users.UpdateAsync(user);
+            await unitOfWork.SaveChangesAsync();
+
+            baseResponse.Data = result;
+            return baseResponse;
+        }
+        
+        public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
+        {
+            BaseResponse<User> baseResponse = new BaseResponse<User>();
+
+            var entity = await unitOfWork.Users.GetAsync(expression);
+            if (entity is null || entity.Status == Domain.Enums.ItemState.Deleted)
+            {
+                baseResponse.Error = new ErrorModel(404, "Customer not found");
+                return baseResponse;
+            }
+
+            baseResponse.Data = entity;
             return baseResponse;
         }
 
@@ -82,44 +136,6 @@ namespace ZaminEducationClone.Service.Services
 
             baseResponse.Data = entities.Where(obj => obj.Status != Domain.Enums.ItemState.Deleted).ToPagedList(@params);
 
-            return baseResponse;
-        }
-
-        public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
-        {
-            BaseResponse<User> baseResponse = new BaseResponse<User>();
-
-            var entity = await unitOfWork.Users.GetAsync(expression);
-            if (entity is null || entity.Status == Domain.Enums.ItemState.Deleted)
-            {
-                baseResponse.Error = new ErrorModel(404, "Customer not found");
-                return baseResponse;
-            }
-
-            baseResponse.Data = entity;
-            return baseResponse;
-        }
-
-        public async Task<BaseResponse<User>> UpdateAsync(UserUpdateDTo userDto)
-        {
-            BaseResponse<User> baseResponse = new BaseResponse<User>();
-
-            var entity = await unitOfWork.Users.GetAsync(obj => obj.Id == userDto.Id);
-            if (entity is null)
-            {
-                baseResponse.Error = new ErrorModel(404, "Customer not found");
-                return baseResponse;
-            }
-
-            var user = mapper.Map<User>(userDto);
-            user.Update("1");
-            user.Id = userDto.Id;
-
-
-            var result = await unitOfWork.Users.UpdateAsync(user);
-            await unitOfWork.SaveChangesAsync();
-
-            baseResponse.Data = result;
             return baseResponse;
         }
 

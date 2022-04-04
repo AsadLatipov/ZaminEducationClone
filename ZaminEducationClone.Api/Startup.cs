@@ -39,7 +39,9 @@ namespace ZaminEducationClone.Api
             
             // My services
             services.AddHttpContextAccessor();
-            
+
+            services.AddScoped<ITopicService, TopicService>();
+            services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

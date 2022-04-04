@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -32,9 +33,19 @@ namespace ZaminEducationClone.Data.Repositories
             return entry.Entity;
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> expression)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> expression, List<string> include = null)
         {
-            var entity = await dbset.FirstOrDefaultAsync(expression);
+            IQueryable<T> query = dbset;
+            
+            if (include != null)
+            {
+                foreach (var item in include)
+                {
+                    query = query.Include(item);
+                }
+            }
+            
+            var entity = await query.AsNoTracking().FirstOrDefaultAsync(expression);
             return entity;
         }
 
