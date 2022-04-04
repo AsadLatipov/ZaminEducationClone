@@ -11,7 +11,7 @@ using ZaminEducationClone.Service.Interfaces;
 namespace ZaminEducationClone.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class usersController : ControllerBase
     {
         private readonly IUserService userService;

@@ -10,7 +10,7 @@ namespace ZaminEducationClone.Domain.Entities.Courses
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string VideoUrl { get; set; }
+        public string Video { get; set; }
         public string VideoDuration { get; set; }
         public Guid TopicId { get; set; }
 

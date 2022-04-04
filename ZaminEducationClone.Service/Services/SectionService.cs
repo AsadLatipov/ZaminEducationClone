@@ -96,7 +96,7 @@ namespace ZaminEducationClone.Service.Services
         {
             BaseResponse<Section> baseResponse = new BaseResponse<Section>();
 
-            List<string> lst = new List<string>() { "Courses" };
+            List<string> lst = new List<string>() { "Courses.Topics.Lessons"};
             
             var entity = await unitOfWork.Sections.GetAsync(expression, lst);
             if (entity is null || entity.Status == Domain.Enums.ItemState.Deleted)

@@ -11,11 +11,11 @@ using ZaminEducationClone.Service.Interfaces;
 namespace ZaminEducationClone.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class sectionController : ControllerBase
+    [Route("api/[controller]")]
+    public class sectionsController : ControllerBase
     {
         private readonly ISectionService sectionService;
-        public sectionController(ISectionService sectionService)
+        public sectionsController(ISectionService sectionService)
         {
             this.sectionService = sectionService;
         }

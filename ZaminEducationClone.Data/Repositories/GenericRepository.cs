@@ -45,7 +45,7 @@ namespace ZaminEducationClone.Data.Repositories
                 }
             }
             
-            var entity = await query.AsNoTracking().FirstOrDefaultAsync(expression);
+            var entity = await query.FirstOrDefaultAsync(expression);
             return entity;
         }
 

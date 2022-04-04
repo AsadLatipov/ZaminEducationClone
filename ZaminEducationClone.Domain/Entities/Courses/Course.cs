@@ -18,7 +18,6 @@ namespace ZaminEducationClone.Domain.Entities.Courses
 
         [Required]
         public string Image { get; set; }
-        public string Video { get; set; }
 
         [Required]
         public Guid SectionId { get; set; }
