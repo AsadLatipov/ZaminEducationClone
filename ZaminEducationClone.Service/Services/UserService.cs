@@ -42,7 +42,7 @@ namespace ZaminEducationClone.Service.Services
             baseResponse.Data = user;
             return baseResponse;
         }
-        
+
         public async Task<BaseResponse<User>> CreateAsync(UserCreateDto userDTo)
         {
             BaseResponse<User> baseResponse = new BaseResponse<User>();
@@ -87,7 +87,7 @@ namespace ZaminEducationClone.Service.Services
             baseResponse.Data = result;
             return baseResponse;
         }
-        
+
         public async Task<BaseResponse<User>> GetAsync(Expression<Func<User, bool>> expression)
         {
             BaseResponse<User> baseResponse = new BaseResponse<User>();

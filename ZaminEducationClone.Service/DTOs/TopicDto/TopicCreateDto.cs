@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZaminEducationClone.Domain.Entities.Courses;
 
 namespace ZaminEducationClone.Service.DTOs.TopicDto
 {
@@ -17,8 +11,8 @@ namespace ZaminEducationClone.Service.DTOs.TopicDto
 
         [Required]
         public Guid CourseId { get; set; }
-        
-        
+
+
     }
 }
 

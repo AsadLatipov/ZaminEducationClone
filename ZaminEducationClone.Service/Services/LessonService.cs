@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using ZaminEducationClone.Data.IRepositories;
 using ZaminEducationClone.Domain.Commons;
@@ -11,10 +13,8 @@ using ZaminEducationClone.Domain.Configurations;
 using ZaminEducationClone.Domain.Entities.Courses;
 using ZaminEducationClone.Service.DTOs.LessonDto;
 using ZaminEducationClone.Service.Extensions;
+using ZaminEducationClone.Service.Helpers;
 using ZaminEducationClone.Service.Interfaces;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
 
 namespace ZaminEducationClone.Service.Services
 {
@@ -35,8 +35,8 @@ namespace ZaminEducationClone.Service.Services
             this.unitOfWork = unitOfWork;
             this.configuration = configuration;
             this.env = env;
-    }
-        
+        }
+
         public async Task<BaseResponse<Lesson>> CreateAsync(LessonCreateDto lessonDto)
         {
             BaseResponse<Lesson> baseResponse = new BaseResponse<Lesson>();
@@ -47,10 +47,14 @@ namespace ZaminEducationClone.Service.Services
                 baseResponse.Error = new ErrorModel(400, "Lesson is exist");
                 return baseResponse;
             }
-            
+
             var lesson = mapper.Map<Lesson>(lessonDto);
             lesson.Create("1");
 
+            string hostUrl = AccesToContext.Context?.Request?.Scheme + "://" + AccesToContext.Context?.Request?.Host.Value + "/";
+
+            var fileName = await SaveFileAsync(lessonDto);
+            lesson.VideoUrl = hostUrl + configuration.GetSection("Storage:VideoUrl").Value + fileName;
 
             var result = await unitOfWork.Lessons.CreateAsync(lesson);
             await unitOfWork.SaveChangesAsync();
@@ -62,7 +66,7 @@ namespace ZaminEducationClone.Service.Services
         public async Task<BaseResponse<Lesson>> UpdateAsync(LessonUpdateDto lessonDto)
         {
             BaseResponse<Lesson> baseResponse = new BaseResponse<Lesson>();
-            
+
             var entity = await unitOfWork.Lessons.GetAsync(obj => obj.Id == lessonDto.Id);
             if (entity is null)
             {
@@ -133,15 +137,18 @@ namespace ZaminEducationClone.Service.Services
             return baseResponse;
         }
 
+
+
         public async Task<string> SaveFileAsync(LessonCreateDto lesson)
         {
-            string fileName = Guid.NewGuid().ToString("N") + "_" + lesson.Video.FileName;
+            string fileName = Guid.NewGuid().ToString("N") + "_" + lesson.VideoUrl.FileName;
             string storagePath = configuration.GetSection("Storage:imageUrl").Value;
             string filePath = Path.Combine(env.WebRootPath, $"{storagePath}/{fileName}");
             FileStream file = File.Create(filePath);
-            await lesson.Video.OpenReadStream().CopyToAsync(file);
+            await lesson.VideoUrl.OpenReadStream().CopyToAsync(file);
             file.Close();
             return fileName;
         }
+
     }
 }

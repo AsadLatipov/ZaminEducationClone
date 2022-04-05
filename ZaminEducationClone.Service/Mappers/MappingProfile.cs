@@ -15,10 +15,10 @@ namespace ZaminEducationClone.Service.Mappers
         {
             CreateMap<UserCreateDto, User>().ReverseMap();
             CreateMap<UserUpdateDto, User>().ReverseMap();
-            
+
             CreateMap<SectionCreateDto, Section>().ReverseMap();
             CreateMap<SectionUpdateDto, Section>().ReverseMap();
-            
+
             CreateMap<TopicCreateDto, Topic>().ReverseMap();
             CreateMap<TopicUpdateDto, Topic>().ReverseMap();
 

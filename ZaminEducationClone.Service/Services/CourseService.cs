@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using ZaminEducationClone.Data.IRepositories;
 using ZaminEducationClone.Domain.Commons;
@@ -14,6 +13,7 @@ using ZaminEducationClone.Domain.Configurations;
 using ZaminEducationClone.Domain.Entities.Courses;
 using ZaminEducationClone.Service.DTOs.CourseDto;
 using ZaminEducationClone.Service.Extensions;
+using ZaminEducationClone.Service.Helpers;
 using ZaminEducationClone.Service.Interfaces;
 
 namespace ZaminEducationClone.Service.Services
@@ -51,6 +51,11 @@ namespace ZaminEducationClone.Service.Services
             var course = mapper.Map<Course>(courseDto);
             course.Create("1");
 
+            string hostUrl = AccesToContext.Context?.Request?.Scheme + "://" + AccesToContext.Context?.Request?.Host.Value + "/";
+
+            var fileName = await SaveFileAsync(courseDto);
+            course.Image = hostUrl + configuration.GetSection("Storage:imageUrl").Value + fileName;
+
 
             var result = await unitOfWork.Courses.CreateAsync(course);
             await unitOfWork.SaveChangesAsync();
@@ -86,7 +91,8 @@ namespace ZaminEducationClone.Service.Services
         {
             BaseResponse<Course> baseResponse = new BaseResponse<Course>();
 
-            List<string> lst = new List<string>() { "Topics" };
+            List<string> lst = new List<string>() { "Topics.Lessons" };
+
 
             var entity = await unitOfWork.Courses.GetAsync(expression, lst);
             if (entity is null || entity.Status == Domain.Enums.ItemState.Deleted)
@@ -98,7 +104,7 @@ namespace ZaminEducationClone.Service.Services
             baseResponse.Data = entity;
             return baseResponse;
         }
-        
+
         public async Task<BaseResponse<bool>> DeleteAsync(Expression<Func<Course, bool>> expression)
         {
             BaseResponse<bool> baseResponse = new BaseResponse<bool>();
@@ -134,16 +140,23 @@ namespace ZaminEducationClone.Service.Services
             return baseResponse;
         }
 
+
+
         public async Task<string> SaveFileAsync(CourseCreateDto course)
         {
+            //
             string fileName = Guid.NewGuid().ToString("N") + "_" + course.Image.FileName;
             string storagePath = configuration.GetSection("Storage:imageUrl").Value;
             string filePath = Path.Combine(env.WebRootPath, $"{storagePath}/{fileName}");
+
+            // 
             FileStream file = File.Create(filePath);
             await course.Image.OpenReadStream().CopyToAsync(file);
             file.Close();
+
             return fileName;
         }
+
 
     }
 }

@@ -36,7 +36,7 @@ namespace ZaminEducationClone.Api
 
             // Mapping
             services.AddAutoMapper(typeof(MappingProfile));
-            
+
             // Accessor
             services.AddHttpContextAccessor();
 
@@ -46,17 +46,17 @@ namespace ZaminEducationClone.Api
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ILessonService, LessonService>();
-            
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            
+
             // For Serialize
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-            
+
             // Defaults
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -76,6 +76,8 @@ namespace ZaminEducationClone.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseRouting();
             if (app.ApplicationServices.GetService<IHttpContextAccessor>() != null)

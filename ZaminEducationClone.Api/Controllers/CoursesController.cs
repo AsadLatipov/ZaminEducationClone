@@ -10,7 +10,7 @@ using ZaminEducationClone.Service.Interfaces;
 
 namespace ZaminEducationClone.Api.Controllers
 {
-    
+
 
     [ApiController]
     [Route("api/[controller]")]
@@ -24,7 +24,7 @@ namespace ZaminEducationClone.Api.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse<Course>>> CreateAsync([FromForm]CourseCreateDto sectionDto)
+        public async Task<ActionResult<BaseResponse<Course>>> CreateAsync([FromForm] CourseCreateDto sectionDto)
         {
             var result = await courseService.CreateAsync(sectionDto);
 
@@ -39,16 +39,16 @@ namespace ZaminEducationClone.Api.Controllers
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        [HttpGet("{course-id}")]
-        public async Task<ActionResult<BaseResponse<Course>>> GetAsync([FromRoute(Name = "course-id")] Guid id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BaseResponse<Course>>> GetAsync(Guid id)
         {
             var result = await courseService.GetAsync(obj => obj.Id == id);
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        [HttpDelete("{course-id}")]
-        public async Task<ActionResult<BaseResponse<bool>>> DeleteAsync([FromRoute(Name = "course-id")] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BaseResponse<bool>>> DeleteAsync(Guid id)
         {
             var result = await courseService.DeleteAsync(obj => obj.Id == id);
 

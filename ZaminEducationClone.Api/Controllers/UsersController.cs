@@ -20,7 +20,7 @@ namespace ZaminEducationClone.Api.Controllers
             this.userService = userService;
         }
 
-        [HttpPost("logIn")]
+        [HttpPost("login")]
         public async Task<ActionResult<BaseResponse<User>>> LogIn(LogIn logIn)
         {
             var result = await userService.LogIn(logIn);
@@ -29,8 +29,8 @@ namespace ZaminEducationClone.Api.Controllers
         }
 
 
-        [HttpPost("SignUp")]
-        public async Task<ActionResult<BaseResponse<User>>> SignUP(UserCreateDto useDto)
+        [HttpPost("sign-up")]
+        public async Task<ActionResult<BaseResponse<User>>> SignUP([FromRoute(Name = "sign-up")]UserCreateDto useDto)
         {
             var result = await userService.CreateAsync(useDto);
 
@@ -45,16 +45,16 @@ namespace ZaminEducationClone.Api.Controllers
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        [HttpGet("{user-id}")]
-        public async Task<ActionResult<BaseResponse<User>>> GetUser([FromRoute(Name = "user-id")] Guid id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BaseResponse<User>>> GetUser(Guid id)
         {
             var result = await userService.GetAsync(obj => obj.Id == id);
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        [HttpDelete("{user-id}")]
-        public async Task<ActionResult<BaseResponse<bool>>> DeleteUser([FromRoute(Name = "user-id")] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BaseResponse<bool>>> DeleteUser(Guid id)
         {
             var result = await userService.DeleteAsync(obj => obj.Id == id);
 

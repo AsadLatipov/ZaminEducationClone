@@ -20,7 +20,7 @@ namespace ZaminEducationClone.Api.Controllers
             this.sectionService = sectionService;
         }
 
-       
+
 
         [HttpPost]
         public async Task<ActionResult<BaseResponse<Section>>> CreateAsync(SectionCreateDto sectionDto)
@@ -38,16 +38,16 @@ namespace ZaminEducationClone.Api.Controllers
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        [HttpGet("{section-id}")]
-        public async Task<ActionResult<BaseResponse<Section>>> GetAsync([FromRoute(Name = "section-id")] Guid id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BaseResponse<Section>>> GetAsync(Guid id)
         {
             var result = await sectionService.GetAsync(obj => obj.Id == id);
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }
 
-        [HttpDelete("{section-id}")]
-        public async Task<ActionResult<BaseResponse<bool>>> DeleteAsync([FromRoute(Name = "section-id")] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BaseResponse<bool>>> DeleteAsync(Guid id)
         {
             var result = await sectionService.DeleteAsync(obj => obj.Id == id);
 

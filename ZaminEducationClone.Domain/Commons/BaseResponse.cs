@@ -8,8 +8,8 @@ namespace ZaminEducationClone.Domain.Commons
         public int? Code { get; set; } = 200;
         public T Data { get; set; }
         public ErrorModel Error { get; set; }
-        
-        
-       
+
+
+
     }
 }

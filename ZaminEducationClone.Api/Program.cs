@@ -18,6 +18,5 @@ namespace ZaminEducationClone.Api
                     webBuilder.UseStartup<Startup>();
                 }).UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                     .ReadFrom.Configuration(hostingContext.Configuration));
-
     }
 }

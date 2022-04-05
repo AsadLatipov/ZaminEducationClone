@@ -12,7 +12,7 @@ namespace ZaminEducationClone.Service.Extensions
         {
             var metaData = new PaginationMetaData(source.Count(), @params);
             var json = JsonConvert.SerializeObject(metaData);
-            
+
 
             if (AccesToContext.ResponseHeaders.Keys.Contains("X-Pagination"))
                 AccesToContext.ResponseHeaders.Remove("X-Pagination");

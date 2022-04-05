@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using ZaminEducationClone.Data.IRepositories;
 using ZaminEducationClone.Domain.Commons;
@@ -90,7 +89,7 @@ namespace ZaminEducationClone.Service.Services
             baseResponse.Data = entity;
             return baseResponse;
         }
-        
+
         public async Task<BaseResponse<bool>> DeleteAsync(Expression<Func<Topic, bool>> expression)
         {
             BaseResponse<bool> baseResponse = new BaseResponse<bool>();

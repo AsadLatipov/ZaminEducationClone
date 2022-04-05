@@ -36,7 +36,7 @@ namespace ZaminEducationClone.Data.Repositories
         public async Task<T> GetAsync(Expression<Func<T, bool>> expression, List<string> include = null)
         {
             IQueryable<T> query = dbset;
-            
+
             if (include != null)
             {
                 foreach (var item in include)
@@ -44,7 +44,7 @@ namespace ZaminEducationClone.Data.Repositories
                     query = query.Include(item);
                 }
             }
-            
+
             var entity = await query.FirstOrDefaultAsync(expression);
             return entity;
         }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using ZaminEducationClone.Domain.Commons;
 using ZaminEducationClone.Domain.Configurations;
@@ -18,6 +16,6 @@ namespace ZaminEducationClone.Service.Interfaces
         Task<BaseResponse<Section>> GetAsync(Expression<Func<Section, bool>> expression);
         Task<BaseResponse<bool>> DeleteAsync(Expression<Func<Section, bool>> expression);
         Task<BaseResponse<IEnumerable<Section>>> GetAllAsync(PaginationParams @params, Expression<Func<Section, bool>> expression = null);
-        
+
     }
 }
