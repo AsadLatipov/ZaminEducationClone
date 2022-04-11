@@ -107,6 +107,7 @@ namespace ZaminEducationClone.Service.Services
 
             string lang = AccesToContext.Language;
             entity.Name =  lang == "en" ? entity.NameEng : lang == "ru" ? entity.NameRu : entity.NameUz;
+            baseResponse.Data = entity;
             return baseResponse;
         }
 
