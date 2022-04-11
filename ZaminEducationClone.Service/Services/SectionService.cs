@@ -10,6 +10,7 @@ using ZaminEducationClone.Domain.Configurations;
 using ZaminEducationClone.Domain.Entities.Courses;
 using ZaminEducationClone.Service.DTOs.SectionDto;
 using ZaminEducationClone.Service.Extensions;
+using ZaminEducationClone.Service.Helpers;
 using ZaminEducationClone.Service.Interfaces;
 
 namespace ZaminEducationClone.Service.Services
@@ -31,7 +32,7 @@ namespace ZaminEducationClone.Service.Services
         public async Task<BaseResponse<Section>> CreateAsync(SectionCreateDto sectionDto)
         {
             BaseResponse<Section> baseResponse = new BaseResponse<Section>();
-            var entity = await unitOfWork.Sections.GetAsync(obj => obj.Name == sectionDto.Name);
+            var entity = await unitOfWork.Sections.GetAsync(obj => obj.NameUz == sectionDto.NameUz);
 
             if (entity is not null)
             {
@@ -104,7 +105,8 @@ namespace ZaminEducationClone.Service.Services
                 return baseResponse;
             }
 
-            baseResponse.Data = entity;
+            string lang = AccesToContext.Language;
+            entity.Name =  lang == "en" ? entity.NameEng : lang == "ru" ? entity.NameRu : entity.NameUz;
             return baseResponse;
         }
 
