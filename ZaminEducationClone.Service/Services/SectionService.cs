@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,15 @@ namespace ZaminEducationClone.Service.Services
 
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IConfiguration con;
+
 
         public SectionService(
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IConfiguration con)
         {
+            this.con = con;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
         }
@@ -121,7 +126,6 @@ namespace ZaminEducationClone.Service.Services
                 baseResponse.Error = new ErrorModel(400, "Section not found");
                 return baseResponse;
             }
-
 
             baseResponse.Data = entities.Where(obj => obj.Status != Domain.Enums.ItemState.Deleted).ToPagedList(@params);
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using ZaminEducationClone.Domain.Commons;
 using ZaminEducationClone.Domain.Configurations;
 using ZaminEducationClone.Domain.Entities.Courses;
 using ZaminEducationClone.Service.DTOs.LessonDto;
+using ZaminEducationClone.Service.Helpers;
 using ZaminEducationClone.Service.Interfaces;
 
 namespace ZaminEducationClone.Api.Controllers
@@ -56,7 +58,7 @@ namespace ZaminEducationClone.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<BaseResponse<IEnumerable<Lesson>>>> GetAllAsync([FromQuery] PaginationParams @params)
         {
-            var result = await lessonService.GetAllAsync(@params);
+            var result = await lessonService.GetAllAsync(@params);    
 
             return StatusCode(result.Code ?? result.Error.Code.Value, result);
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using ZaminEducationClone.Domain.Commons;
 using ZaminEducationClone.Domain.Configurations;
 using ZaminEducationClone.Domain.Entities.Courses;
 using ZaminEducationClone.Service.DTOs.SectionDto;
+using ZaminEducationClone.Service.Helpers;
 using ZaminEducationClone.Service.Interfaces;
 
 namespace ZaminEducationClone.Api.Controllers
@@ -15,9 +17,14 @@ namespace ZaminEducationClone.Api.Controllers
     public class sectionsController : ControllerBase
     {
         private readonly ISectionService sectionService;
-        public sectionsController(ISectionService sectionService)
+        private readonly IConfiguration con;
+
+
+        public sectionsController(ISectionService sectionService,
+            IConfiguration con)
         {
             this.sectionService = sectionService;
+            this.con = con;
         }
 
 
@@ -57,9 +64,34 @@ namespace ZaminEducationClone.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<BaseResponse<IEnumerable<Section>>>> GetAllAsync([FromQuery] PaginationParams @params)
         {
-            var result = await sectionService.GetAllAsync(@params);
+            string user = con.GetSection("Authorization:User").Value;
+            string password = con.GetSection("Authorization:Password").Value;
 
-            return StatusCode(result.Code ?? result.Error.Code.Value, result);
+            if (user == AccesToContext.BasicUser && password == AccesToContext.BasicPassword)
+            {
+                //var result = await sectionService.GetAllAsync(@params);
+
+                var result = new BaseResponse<IEnumerable<Section>>
+                {
+
+                    Data = new List<Section>()
+                    {
+                        new Section()
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Ishladi"
+                        }
+                    },
+                    Error = null,
+                    Code = 200
+
+                };
+                return StatusCode(result.Code ?? result.Error.Code.Value, result);
+
+            }
+            return Unauthorized();
+
+
         }
     }
 }

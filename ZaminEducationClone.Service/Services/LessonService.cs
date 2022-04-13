@@ -122,6 +122,7 @@ namespace ZaminEducationClone.Service.Services
 
         public async Task<BaseResponse<IEnumerable<Lesson>>> GetAllAsync(PaginationParams @params, Expression<Func<Lesson, bool>> expression = null)
         {
+
             BaseResponse<IEnumerable<Lesson>> baseResponse = new BaseResponse<IEnumerable<Lesson>>();
 
             var entities = await unitOfWork.Lessons.GetAllAsync(expression);
